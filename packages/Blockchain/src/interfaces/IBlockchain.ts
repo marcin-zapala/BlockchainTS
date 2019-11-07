@@ -3,7 +3,9 @@ import Transaction from "../types/Transaction";
 
 export default interface IBlockchain {
   chain: Block[];
+  currentNodeUrl: string;
   pendingTransactions: Transaction[];
+  networkNodes: string[];
 
   createNewBlock(nonce: number, previousBlockHash: string, hash: string): Block;
   getLastBlock(): void;

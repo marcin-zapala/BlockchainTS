@@ -2,16 +2,21 @@ import { sha256 } from "js-sha256";
 import IBlockchain from "../interfaces/IBlockchain";
 import Block from "../types/Block";
 import Transaction from "../types/Transaction";
+const currentNodeUrl = process.argv[3];
 
 export default class Blockchain implements IBlockchain {
   chain: Block[];
   pendingTransactions: Transaction[];
+  currentNodeUrl: string;
+  networkNodes: string[];
 
   constructor() {
     this.chain = [];
+    this.currentNodeUrl = currentNodeUrl;
+    this.networkNodes = [];
     this.pendingTransactions = [];
 
-    this.createNewBlock(0, 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', '0')
+    this.createNewBlock(0, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "0");
   }
 
   createNewBlock(

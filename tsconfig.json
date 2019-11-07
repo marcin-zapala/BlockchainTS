@@ -1,14 +1,15 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "esModuleInterop": true,
     "declaration": true,
-    "noImplicitAny": false,
-    "removeComments": true,
+    "noImplicitAny": true,
     "noLib": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es6",
     "sourceMap": true,
+    "baseUrl": ".",
     "lib": [
       "es6"
     ]

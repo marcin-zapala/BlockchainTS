@@ -16,8 +16,9 @@ lerna run tsc
 
 ### Todos:
  - [x] local blockchain
- - [x] add lerna for monorepo (core, ui, blockexplorer)
- - [ ] endpoints to work on nodes
+ - [x] add lerna for monorepo (core, API, blockexplorer)
+ - [ ] endpoints to work on nodes (WIP)
+ - [ ] online startup from lerna
  - [ ] integrate with CircleCi
     - [ ] run checks only on changed repo
  - [ ] add pull request template
