@@ -1,5 +1,7 @@
 # BlockchainTS
+It will be complete solution to handle simple PoW based blockchain
 
+(Work in progress)
 ## Setup
 
 ```
@@ -9,11 +11,16 @@ git clone https://github.com/marcin-zapala/BlockchainTS.git
 
 lerna bootstrap --hoist
 
+lerna run tsc
 ```
 
 ### Todos:
  - [x] local blockchain
+ - [x] add lerna for monorepo (core, ui, blockexplorer)
  - [ ] endpoints to work on nodes
+ - [ ] integrate with CircleCi
+    - [ ] run checks only on changed repo
+ - [ ] add pull request template
  - [ ] decentalizing 
  - [ ] synchoronizing
  - [ ] consensus

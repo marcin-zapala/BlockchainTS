@@ -1,1 +1,1 @@
-export { default as Blockchain } from "./core/Blockchain";
+export { default } from "./core/Blockchain";

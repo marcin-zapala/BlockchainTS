@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "tsc": "tsc"
+  },
   "devDependencies": {
     "lerna": "^3.18.3",
     "typescript": "^3.6.4"
