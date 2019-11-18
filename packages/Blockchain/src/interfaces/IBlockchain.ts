@@ -13,7 +13,7 @@ export default interface IBlockchain {
     amount: number,
     sender: string,
     recipient: string
-  ): number;
+  ): Transaction;
   hashBlock(
     previousBlockHash: string,
     currentBlockData: Transaction[],
@@ -23,4 +23,5 @@ export default interface IBlockchain {
     previousBlockHash: string,
     currentBlockData: Transaction[]
   ): number;
+  addTransactionToPendingTransactions(transaction: Transaction): number;
 }

@@ -46,3 +46,24 @@ body {
     allNetworkNodes: string[] //nodes urls
 }
 ~~~
+
+### /transaction-broadcast
+Send transaction to all nodes
+~~~
+body: {
+    amount: number,
+    sender: string,
+    recipient: string
+}
+~~~
+
+### /receive-new-block
+Recive mined block
+~~~
+  index: number;
+  timestamp: number;
+  transaction: Transaction[],
+  nonce: number,
+  hash: string,
+  previousBlockHash: string,
+~~~

@@ -2,6 +2,8 @@ import { sha256 } from "js-sha256";
 import IBlockchain from "../interfaces/IBlockchain";
 import Block from "../types/Block";
 import Transaction from "../types/Transaction";
+import uuid from "uuid/v1";
+
 const currentNodeUrl = process.argv[3];
 
 export default class Blockchain implements IBlockchain {
@@ -47,14 +49,19 @@ export default class Blockchain implements IBlockchain {
     amount: number = 0,
     sender: string = "",
     recipient: string = ""
-  ): number {
-    const newTransaction: Transaction = {
+  ): Transaction {
+    return {
+      transactionId: uuid()
+        .split("-")
+        .join(""),
       amount,
       sender,
       recipient
     };
+  }
 
-    this.pendingTransactions = [...this.pendingTransactions, newTransaction];
+  addTransactionToPendingTransactions(transaction: Transaction): number {
+    this.pendingTransactions = [...this.pendingTransactions, transaction];
 
     return this.getLastBlock()["index"] + 1;
   }
