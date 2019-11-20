@@ -1,5 +1,7 @@
 import Blockchain from "../Blockchain";
 import Block from "../../types/Block";
+import block from "./mock/blockchain.mock";
+import blockchain from "./mock/blockchain.mock";
 
 const MOCKED_DATE = "MOCKED_DATE";
 Date.now = jest.fn().mockReturnValue("MOCKED_DATE");
@@ -236,6 +238,33 @@ describe("core/blockchain", () => {
       );
 
       expect(hash.substring(0, 4)).toBe("0000");
+    });
+  });
+
+  describe("chainIsValid", () => {
+    it("should return true on correct blockchain", () => {
+      const blockchain = new Blockchain();
+      const result = blockchain.chainIsValid(block);
+
+      expect(result).toBeTruthy();
+    });
+
+    it("should return false on incorrect blockchain", () => {
+      const blockchain = new Blockchain();
+      const badBlocks = [
+        ...block,
+        {
+          index: 4,
+          timestamp: 1574233223296,
+          transaction: [],
+          nonce: 0,
+          hash: "25",
+          previousBlockHash: "0"
+        }
+      ];
+      const result = blockchain.chainIsValid(badBlocks);
+
+      expect(result).toBeFalsy();
     });
   });
 });

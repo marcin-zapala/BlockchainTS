@@ -94,4 +94,45 @@ export default class Blockchain implements IBlockchain {
 
     return nonce;
   }
+
+  chainIsValid(blockchain: Block[]): boolean {
+    let validChain = true;
+
+    //ommit genesis block
+    for (let i = 1; i < blockchain.length; i++) {
+      const currentBlock = blockchain[i];
+      const prevBlock = blockchain[i - 1];
+      const blockHash = this.hashBlock(
+        prevBlock.hash,
+        currentBlock.transaction,
+        currentBlock.nonce
+      );
+
+      if (blockHash.substring(0, 4) !== "0000") {
+        validChain = false;
+      }
+
+      if (currentBlock.previousBlockHash !== prevBlock.hash) {
+        validChain = false;
+      }
+    }
+    const genesisBlock = blockchain[0];
+    const correctNonce = genesisBlock.nonce === 0;
+    const correctBlockHash =
+      genesisBlock.previousBlockHash ===
+      "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+    const correctHash = genesisBlock.hash === "0";
+    const correctTransactions = genesisBlock.transaction.length === 0;
+
+    if (
+      !correctNonce ||
+      !correctBlockHash ||
+      !correctHash ||
+      !correctTransactions
+    ) {
+      validChain = false;
+    }
+
+    return validChain;
+  }
 }

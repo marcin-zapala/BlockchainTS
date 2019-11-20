@@ -49,11 +49,11 @@ app.post(
       };
 
       requestPromises.push(rp(requestOptions));
+    });
 
-      Promise.all(requestPromises).then(data => {
-        res.json({
-          note: "Transaction created and broadcast successfully"
-        });
+    Promise.all(requestPromises).then(data => {
+      res.json({
+        note: "Transaction created and broadcast successfully"
       });
     });
   }
@@ -88,9 +88,9 @@ app.get("/mine", (req, res) => {
 
     requests.push(rp(requestOptions));
   });
+
   Promise.all(requests)
     .then(data => {
-      console.log("addbroadcash");
       const requestOptions = {
         uri: `${blockchain.currentNodeUrl}/transaction/broadcast`,
         method: "POST",
@@ -132,28 +132,29 @@ app.post("/register-and-broadcast-node", (req, res) => {
     };
 
     reqNodesPromises.push(rp(requestOptions));
-    Promise.all(reqNodesPromises)
-      .then(data => {
-        const bulkRegisterOptions = {
-          uri: `${newNodeUrl}/register-nodes-bulk`,
-          method: "POST",
-          body: {
-            allNetworkNodes: [
-              ...blockchain.networkNodes,
-              blockchain.currentNodeUrl
-            ]
-          },
-          json: true
-        };
-
-        return rp(bulkRegisterOptions);
-      })
-      .then(data => {
-        res.json({
-          note: "New node register with network successfully"
-        });
-      });
   });
+
+  Promise.all(reqNodesPromises)
+    .then(data => {
+      const bulkRegisterOptions = {
+        uri: `${newNodeUrl}/register-nodes-bulk`,
+        method: "POST",
+        body: {
+          allNetworkNodes: [
+            ...blockchain.networkNodes,
+            blockchain.currentNodeUrl
+          ]
+        },
+        json: true
+      };
+
+      return rp(bulkRegisterOptions);
+    })
+    .then(data => {
+      res.json({
+        note: "New node register with network successfully"
+      });
+    });
 });
 
 //rest nodes register new incoming node
@@ -208,6 +209,52 @@ app.post("/receive-new-block", (req, res) => {
       newBlock
     });
   }
+});
+
+app.get("/consensus", (req, res) => {
+  const requestPromises: RequestPromise[] = [];
+  blockchain.networkNodes.forEach(networkNodeUrl => {
+    const requestOptions = {
+      uri: `${networkNodeUrl}/blockchain`,
+      method: "GET",
+      json: true
+    };
+    requestPromises.push(rp(requestOptions));
+  });
+
+  Promise.all(requestPromises)
+    .then(blockchains => {
+      const currentChainLink = blockchain.chain.length;
+      let maxChainLength = currentChainLink;
+      let newLongestChain = null;
+      let newPendingTransactions = null;
+
+      blockchains.forEach(blc => {
+        if (blc.chain.length > maxChainLength) {
+          maxChainLength = blc.chain.length;
+          newLongestChain = blc.chain;
+          newPendingTransactions = blc.pendingTransactions;
+        }
+      });
+
+      if (
+        !newLongestChain ||
+        (newLongestChain && !blockchain.chainIsValid(newLongestChain))
+      ) {
+        res.json({
+          note: "Current chain has not been replaced.",
+          chain: blockchain.chain
+        });
+      } else {
+        blockchain.chain = newLongestChain;
+        blockchain.pendingTransactions = newPendingTransactions;
+        res.json({
+          note: "This chain has been replaced.",
+          chain: blockchain.chain
+        });
+      }
+    })
+    .catch(err => console.log(err));
 });
 
 app.listen(port, () => console.log(`Listening on ${port}`));
