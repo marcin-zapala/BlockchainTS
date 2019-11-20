@@ -32,7 +32,7 @@ on new node invoke
 newNodeUrl:port/consensus
 ~~~
 
-now you have new synchronized note in your network
+now you have new synchronized node in your network
 
 
 ### Todos:
@@ -42,6 +42,5 @@ now you have new synchronized note in your network
  - [x] decentalizing 
  - [x] synchoronizing
  - [x] consensus (longest chain rule)
- - [ ] blockexplorer
- - [ ] startup from lerna
+ - [x] blockexplorer endpoints
  

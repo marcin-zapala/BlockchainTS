@@ -135,4 +135,60 @@ export default class Blockchain implements IBlockchain {
 
     return validChain;
   }
+
+  getBlock(blockHash: string): Block {
+    return this.chain.find(({ hash }) => hash === blockHash);
+  }
+
+  getTransaction(
+    transactionId: string
+  ): { transaction: Transaction; block: Block } {
+    let correctTransaction = null;
+    let correctBlock = null;
+    this.chain.forEach(block => {
+      block.transaction.forEach(transaction => {
+        if (transaction.transactionId === transactionId) {
+          correctTransaction = transaction;
+          correctBlock = block;
+        }
+      });
+    });
+
+    return {
+      transaction: correctTransaction,
+      block: correctBlock
+    };
+  }
+
+  getAddressData(
+    address: string
+  ): { addressTransactions: Transaction[]; addressBalance: number } {
+    const addressTransactions: Transaction[] = [];
+    this.chain.forEach(block => {
+      block.transaction.forEach(transaction => {
+        if (
+          transaction.sender === address ||
+          transaction.recipient === address
+        ) {
+          addressTransactions.push(transaction);
+        }
+      });
+    });
+
+    let balance = 0;
+    addressTransactions.forEach(transaction => {
+      if (transaction.recipient === address) {
+        balance += transaction.amount;
+      }
+
+      if (transaction.sender === address) {
+        balance -= transaction.amount;
+      }
+    });
+
+    return {
+      addressTransactions,
+      addressBalance: balance
+    };
+  }
 }

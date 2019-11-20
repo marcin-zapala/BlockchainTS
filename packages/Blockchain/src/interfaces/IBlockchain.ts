@@ -24,4 +24,12 @@ export default interface IBlockchain {
     currentBlockData: Transaction[]
   ): number;
   addTransactionToPendingTransactions(transaction: Transaction): number;
+  chainIsValid(blockchain: Block[]): boolean;
+  getBlock(blockHash: string): Block;
+  getTransaction(
+    transactionId: string
+  ): { transaction: Transaction; block: Block };
+  getAddressData(
+    address: string
+  ): { addressTransactions: Transaction[]; addressBalance: number };
 }
